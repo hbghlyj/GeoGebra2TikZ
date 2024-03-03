@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>GeoGebra to TikZ</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.min.js"></script>
+    <style type="text/css" media="screen">
+      .ace_editor {
+	  border: 1px solid lightgray;
+	  margin-bottom: 1px !important;
+	  width: 100%;
+      }
+      a { text-decoration:none; color:#5555FF}
+      a:hover   {text-decoration:underline}
+      button:hover{background-color:red}
+    </style>
+    <script src="./runlatex.js"></script>
+    <script>
+      runlatex.editorlines=40;
+      runlatex.adddefaultpreamble=true;
+      runlatex.adddefaultengine=true;
+
+      runlatex.overleafURI=null;
+      
+      runlatex.texts ={
+	  "Open in Overleaf": "",
+	  "TeXLive.net":      "TeXLive.net", 
+	  "Delete Output":    "Delete Output",
+	  "Compiling PDF":    "Compiling PDF or HTML",
+	  "Added Code":       "",
+	  "End Added Code":   "",
+	  "Top Caption":      ""
+      }
+function copyfull(){
+      var nn=document.createElement("textarea");
+      nn.value=editors["pre0"].getValue();
+      document.body.appendChild(nn);
+      nn.select();
+      document.execCommand("copy");
+      document.body.removeChild(nn);
+}
+function copytex(){
+      var match=new RegExp("(?:\\\\begin\{document\})(.*)(?:\\\\end\{document\})","gs").exec(editors["pre0"].getValue())[1].trim();
+      if(match!=null){
+      var nn=document.createElement("textarea");
+      nn.value=match;
+      document.body.appendChild(nn);
+      nn.select();
+      document.execCommand("copy");
+      document.body.removeChild(nn);}
+}
+function fillForm() {
+  if(document.location.search != "") {
+      editors["pre0"].setValue(decodeURI(document.location.search.substring(1)),0);
+      editors["pre0"].clearSelection();
+      latexcgi("pre0");
+  }
+}
+window.addEventListener('load', fillForm, false);
+    </script>
+    <style>
+      body {margin:auto; max-width: 70em;}
+      div.h {background-color: #F5F5FF;margin: .5em 0;}
+      pre {background-color: #EEE;margin:0;padding: .5em;}
+    </style> 
+  </head>
+<body>
+<div class="h">
+<pre id="pre0">\documentclass[tikz]{standalone}
+\begin{document}
+\begin{tikzpicture}
+
+\end{tikzpicture}
+\end{document}</pre><button onclick="copytex()">Copy</button> <button onclick="copyfull()">Copy Full</button> 
+<span><form style="display:none" id="form-pre0" action="https://www.overleaf.com/docs" method="post" target="_blank"></form></span><button class="llbutton" onclick="openinoverleaf('pre0')">Open in Overleaf</button> <span><form style="display:none" id="form-ggb" ><input name="ggb" accept=".ggb" type="file" id="ggb" onchange="var request = new XMLHttpRequest();request.open('POST','https://cjhb.site/static/ggb/ggb.py',true);request.onload = function(){if(request.responseXML){document.getElementById('pre0ifr').src = 'data:text/html;charset=utf-8,' + escape(request.responseText);return;}document.getElementById('ggb').value='';editors['pre0'].setValue(request.responseText,0);editors['pre0'].clearSelection();latexcgi('pre0');};request.send(new FormData(document.getElementById('form-ggb')));
+    var b = document.getElementById('lo-pre0');
+    var ifr= document.getElementById('pre0ifr');
+    if(ifr == null) {
+      ifr=document.createElement('iframe');
+      ifr.setAttribute('width','100%');
+      ifr.setAttribute('height','500em');
+      ifr.setAttribute('id','pre0ifr');
+      ifr.setAttribute('name','pre0ifr');
+      b.parentNode.insertBefore(ifr, b.nextSibling);
+      d=document.createElement('button');
+      d.innerText=runlatex.texts['Delete Output'];
+            d.setAttribute('class','llbutton');
+      d.setAttribute('id','del-pre0');
+      d.setAttribute('onclick','deleteoutput(\'pre0\')');
+      b.parentNode.insertBefore(d, b.nextSibling);
+    }
+    var  loading=document.createElement('div');
+    loading.id='pre0load';
+    loading.textContent=runlatex.texts['Compiling PDF'] + ' . . .';
+    b.parentNode.insertBefore(loading, ifr);
+    // scroll only if really close to the bottom
+    var rect = b.getBoundingClientRect();
+    if(document.documentElement.clientHeight - rect.bottom < 50){
+	window.scrollBy(0,150);
+    }
+    setTimeout(function () {
+	b.parentNode.removeChild(document.getElementById('pre0load'));
+    }, 1000);"></form></span><button onclick="document.getElementById('ggb').click()">Import from GeoGebra</button>
+</body>
