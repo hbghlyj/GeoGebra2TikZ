@@ -319,7 +319,7 @@ for pt in root.find("construction").findall("element[@type='point']"):
 	if pt.find("show").attrib["object"]=="false" or  pt.find("coords").attrib["x"]=='NaN' or  pt.find("coords").attrib["y"]=='NaN':
 		continue
 	f.append("\n\\draw[fill=blue]("+pt.find("coords").attrib["x"]+","+pt.find("coords").attrib["y"]+")circle(\\pointsize);")
-	f.append("\n\\draw[color=blue]("+pt.find("coords").attrib["x"]+","+pt.find("coords").attrib["y"]+")")
+	f.append("\n\\draw[blue]("+pt.find("coords").attrib["x"]+","+pt.find("coords").attrib["y"]+")")
 	if pt.find("show").attrib["label"]=="true":
 		f.append("node")
 		if len(pt.findall("labelOffset")):
