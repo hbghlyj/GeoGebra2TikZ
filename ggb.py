@@ -16,6 +16,11 @@ temp_dir=tempfile.TemporaryDirectory()
 z.extract('geogebra.xml',temp_dir.name)
 root=ET.parse(temp_dir.name+'/geogebra.xml').getroot()
 f=["\\documentclass{standalone}\n\\usepackage{tikz}\n\\begin{document}\n\\begin{tikzpicture}\n\\tikzset{every path/.append style={line width=1}}\n\\pgfmathsetmacro{\pointsize}{.05pt}"]
+for pt in root.find("construction").findall("element[@type='point']"):
+	if pt.find("coords").attrib["x"]=='NaN' or  pt.find("coords").attrib["y"]=='NaN':
+		continue
+	pt.find("coords").attrib["x"]=str(float(pt.find("coords").attrib["x"])/float(pt.find("coords").attrib["z"]))
+	pt.find("coords").attrib["y"]=str(float(pt.find("coords").attrib["y"])/float(pt.find("coords").attrib["z"]))
 for li in root.find("construction").findall("command[@name='Polygon']"):
 	se=root.find("construction").find('element[@label="'+li.find("output").attrib["a0"]+'"]')
 	if se.find("show").attrib["object"]=="false":
