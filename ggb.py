@@ -328,15 +328,14 @@ for pt in root.find("construction").findall("element[@type='point']"):
 	if pt.find("show").attrib["object"]=="false" or  pt.find("coords").attrib["x"]=='NaN' or  pt.find("coords").attrib["y"]=='NaN':
 		continue
 	f.append("\n\\draw[fill=blue]("+pt.find("coords").attrib["x"]+","+pt.find("coords").attrib["y"]+")circle(\\pointsize);")
-	f.append("\n\\draw[blue]("+pt.find("coords").attrib["x"]+","+pt.find("coords").attrib["y"]+")")
 	if pt.find("show").attrib["label"]=="true":
+		f.append("\n\\draw[blue]("+pt.find("coords").attrib["x"]+","+pt.find("coords").attrib["y"]+")")
 		f.append("node")
 		if len(pt.findall("labelOffset")):
 			f.append("[xshift="+pt.find("labelOffset").attrib["x"]+",yshift="+pt.find("labelOffset").attrib["y"]+"]")
 		else:
 			f.append("[above right]")
-		f.append("{$"+unicode_to_latex(pt.attrib["label"])+"$}")
-	f.append(";")
+		f.append("{$"+unicode_to_latex(pt.attrib["label"])+"$};")
 f.append("\n\\end{tikzpicture}\n\\end{document}")
 temp_dir.cleanup()
 print(''.join(f))
