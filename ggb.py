@@ -93,7 +93,11 @@ for li in root.find("construction").findall("command[@name='Segment']"):
 		continue
 	pt1=root.find("construction").find('element[@label="'+li.find("input").attrib["a0"]+'"]')
 	pt2=root.find("construction").find('element[@label="'+li.find("input").attrib["a1"]+'"]')
-	f.append("\n\\draw("+pt1.find("coords").attrib["x"]+","+pt1.find("coords").attrib["y"]+")--("+pt2.find("coords").attrib["x"]+","+pt2.find("coords").attrib["y"]+")")
+	if se.find("lineStyle").attrib["type"]=="0":
+		dash=""
+	else:
+		dash="[dash pattern=on 4pt off 4pt]"
+	f.append("\n\\draw"+dash+"("+pt1.find("coords").attrib["x"]+","+pt1.find("coords").attrib["y"]+")--("+pt2.find("coords").attrib["x"]+","+pt2.find("coords").attrib["y"]+")")
 	if se.find("show").attrib["label"]=="true":
 		f.append("node")
 		if len(se.findall("labelOffset")):
